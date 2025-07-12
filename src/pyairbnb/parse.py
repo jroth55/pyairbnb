@@ -30,5 +30,5 @@ def parse_body_details(body:str):
     api_key = api_key.replace('"key":"', "")
     api_key = api_key.replace('"', "")
     data = json.loads(html_data)
-    details_data = data["niobeMinimalClientData"][0][1]
+    details_data = data["niobeClientData"][0][1]
     return details_data, language, api_key
