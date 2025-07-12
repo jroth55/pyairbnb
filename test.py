@@ -1,6 +1,6 @@
 import pyairbnb
 import json
-
+#
 check_in = "2026-05-15"
 check_out = "2026-05-17"
 currency = "EUR"
