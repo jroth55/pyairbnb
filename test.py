@@ -70,7 +70,7 @@ with open('details_data.json', 'w', encoding='utf-8') as f:
     f.write(json.dumps(data))  # Convert the data to JSON and save it
 
 # Test search_all_from_url using a sample Airbnb URL with various filters
-results = pyairbnb.search_all_from_url("https://www.airbnb.com/s/Luxembourg--Luxembourg/homes?checkin=2026-05-15&checkout=2026-05-15&ne_lat=49.765370668280966&ne_lng=6.560570632398054&sw_lat=49.31155139251553&sw_lng=6.0326271739902495&zoom=10&price_min=22&price_max=100&room_types%5B%5D=Entire%20home%2Fapt&amenities%5B%5D=4&amenities%5B%5D=5", currency="USD", proxy_url="")
+results = pyairbnb.search_all_from_url("https://www.airbnb.com/s/Luxembourg--Luxembourg/homes?checkin=2026-05-15&checkout=2026-05-16&ne_lat=49.765370668280966&ne_lng=6.560570632398054&sw_lat=49.31155139251553&sw_lng=6.0326271739902495&zoom=10&price_min=22&price_max=200&room_types%5B%5D=Entire%20home%2Fapt&amenities%5B%5D=4&amenities%5B%5D=5&flexible_cancellation=true", currency="USD", proxy_url="")
 
 with open('search_results_from_url.json', 'w', encoding='utf-8') as f:
     f.write(json.dumps(results))  # Convert the data to JSON and save it

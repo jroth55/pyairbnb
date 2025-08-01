@@ -33,7 +33,7 @@ headers_global = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_long:float, sw_lat:float, sw_long:float, zoom_value:int, currency:str, place_type: str, price_min: int, price_max: int, amenities: list, language: str, proxy_url:str):
+def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_long:float, sw_lat:float, sw_long:float, zoom_value:int, currency:str, place_type: str, price_min: int, price_max: int, amenities: list, free_cancellation: bool, language: str, proxy_url:str):
     base_url = "https://www.airbnb.com/api/v3/StaysSearch/d4d9503616dc72ab220ed8dcf17f166816dccb2593e7b4625c91c3fce3a3b3d6"
     query_params = {
         "operationName": "StaysSearch",
@@ -95,6 +95,11 @@ def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_l
         # Add selected filter order for each amenity
         for amenity_id in amenities:
             rawParams.append({"filterName":"selected_filter_order","filterValues": [f"amenities:{amenity_id}"]})
+
+    # Add free cancellation filtering if provided
+    if free_cancellation is not None and free_cancellation:
+        rawParams.append({"filterName":"flexible_cancellation","filterValues": ["true"]})
+        rawParams.append({"filterName":"selected_filter_order","filterValues": ["flexible_cancellation:true"]})
 
     inputData = {
         "operationName":"StaysSearch",
