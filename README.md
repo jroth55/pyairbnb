@@ -5,7 +5,7 @@ This project is an open-source tool developed in Python for extracting product i
 
 ## Features
 - Extract prices, available dates, reviews, host details and others
-- Full search support with filtering by amenities
+- Full search support with filtering by amenities and free cancellation
 - Extracts detailed product information from Airbnb
 - Implemented in Python just because it's popular
 - Easy to integrate with existing Python projects
@@ -45,6 +45,7 @@ price_min = 1000
 price_max = 0
 place_type = "Private room" #or "Entire home/apt" or empty
 amenities = [4, 7]  # Example: Filter for listings with WiFi and Pool or leave empty
+free_cancellation = False  # Filter for listings with free/flexible cancellation
 language = "th"
 proxy_url = ""
 
@@ -61,6 +62,7 @@ search_results = pyairbnb.search_all(
     price_max=price_max,
     place_type=place_type,
     amenities=amenities,
+    free_cancellation=free_cancellation,
     currency=currency,
     language=language,
     proxy_url=proxy_url
@@ -77,8 +79,8 @@ with open('search_results.json', 'w', encoding='utf-8') as f:
 import pyairbnb
 import json
 
-# Define an Airbnb search URL using only the supported parameters
-url = "https://www.airbnb.com/s/Luxembourg--Luxembourg/homes?checkin=2025-07-09&checkout=2025-07-16&ne_lat=49.76537&ne_lng=6.56057&sw_lat=49.31155&sw_lng=6.03263&zoom=10&price_min=22&price_max=100&room_types%5B%5D=Entire%20home%2Fapt&amenities%5B%5D=4&amenities%5B%5D=5"
+# Define an Airbnb search URL using only the supported parameters (including free cancellation)
+url = "https://www.airbnb.com/s/Luxembourg--Luxembourg/homes?checkin=2026-02-09&checkout=2026-02-16&ne_lat=49.76537&ne_lng=6.56057&sw_lat=49.31155&sw_lng=6.03263&zoom=10&price_min=154&price_max=700&room_types%5B%5D=Entire%20home%2Fapt&amenities%5B%5D=4&amenities%5B%5D=5&flexible_cancellation=true"
 
 # Use the URL wrapper
 results = pyairbnb.search_all_from_url(url, currency="EUR", language ="es", proxy_url="")
