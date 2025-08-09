@@ -2,9 +2,9 @@ import pyairbnb.details as details
 import pyairbnb.reviews as reviews
 import pyairbnb.price as price
 import pyairbnb.api as api
-import pyairbnb.search as search
+import search
 import pyairbnb.utils as utils
-import pyairbnb.standardize as standardize
+import  standardize
 import pyairbnb.experience as experience
 import pyairbnb.calendarinfo as calendar
 import pyairbnb.host_details as host_details
@@ -130,11 +130,12 @@ def search_all(check_in: str, check_out: str, ne_lat: float, ne_long: float, sw_
             api_key, cursor, check_in, check_out, ne_lat, ne_long, sw_lat, sw_long, zoom_value, 
             currency, place_type, price_min, price_max, amenities, free_cancellation, language, proxy_url
         )
-        results = standardize.from_search(results_raw.get("searchResults", []))
+        paginationInfo = utils.get_nested_value(results_raw,"data.presentation.staysSearch.results.paginationInfo",{})
+        results = standardize.from_search(results_raw)
         all_results.extend(results)
-        if not results or "nextPageCursor" not in results_raw["paginationInfo"] or results_raw["paginationInfo"]["nextPageCursor"] is None:
+        if not results or "nextPageCursor" not in paginationInfo or paginationInfo["nextPageCursor"] is None:
             break
-        cursor = results_raw["paginationInfo"]["nextPageCursor"]
+        cursor = paginationInfo["nextPageCursor"]
     return all_results
 
 def search_first_page(check_in: str, check_out: str, ne_lat: float, ne_long: float, sw_lat: float, sw_long: float,

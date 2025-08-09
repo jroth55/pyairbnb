@@ -1,23 +1,32 @@
 import re
 import pyairbnb.utils as utils
+import json
 
 regex_number =  re.compile(r'\d+')
             
-def from_search(results):
+def from_search(resultRaw):
+    mapResults = utils.get_nested_value(resultRaw,"data.presentation.staysSearch.mapResults.mapSearchResults","")
+    idsMap = utils.get_nested_value(resultRaw,"data.presentation.staysSearch.mapResults.staysInViewport",{})
     datas = []
-    for result in results:
+    for index, result in enumerate(mapResults):
         type_name = utils.get_nested_value(result,"__typename","")
         if type_name!="StaySearchResult":
             continue
-        lt = utils.get_nested_value(result,"listing",{})
-        pr = utils.get_nested_value(result,"pricingQuote.structuredStayDisplayPrice",{})
+        pr = utils.get_nested_value(result,"structuredDisplayPrice",{})
+        id = 0
+        if index<len(idsMap):
+            idData = idsMap[index]
+            id = int(utils.get_nested_value(idData,"listingId",0))
         data = {
-            "room_id":  int(lt["id"]),
-            "category": utils.get_nested_value(lt,"roomTypeCategory",""),
-            "kind":     utils.get_nested_value(lt,"pdpUrlType",""),
-            "name":     utils.get_nested_value(lt,"name",""),
-            "title":    utils.get_nested_value(lt,"title",""),
-            "type":     utils.get_nested_value(lt,"listingObjType",""),
+            "room_id":  id,
+            "category": "",#can't find it on the new data returned by airbnb
+            "structuredContent": utils.get_nested_value(result,"structuredContent",{}), #new data that could be usefull
+            "passportData": utils.get_nested_value(result,"passportData",{}), #new data that could be usefull
+            "paymentMessages": utils.get_nested_value(result,"paymentMessages",{}), #new data that could be usefull
+            "kind":     "", #can't find it on the new data returned by airbnb
+            "name":     utils.get_nested_value(result,"demandStayListing.description.name.localizedStringWithTranslationPreference",""),
+            "title":    utils.get_nested_value(result,"title",""),
+            "type":     "",#can't find it on the new data returned by airbnb
             "long_stay_discount":{},
             "fee":{
                 "airbnb":{},
@@ -37,14 +46,14 @@ def from_search(results):
             "images": [],
             "badges": [],
             "coordinates":{
-                "latitude": utils.get_nested_value(lt,"coordinate.latitude",0),
-                "longitud": utils.get_nested_value(lt,"coordinate.longitude",0),
+                "latitude": utils.get_nested_value(result,"demandStayListing.location.coordinate.latitude",0),
+                "longitud": utils.get_nested_value(result,"demandStayListing.location.coordinate.longitude",0),
             },
         }
-        for badge in utils.get_nested_value(lt,"formattedBadges",[]):
+        for badge in utils.get_nested_value(result,"formattedBadges",[]):
             data["badges"].append(utils.get_nested_value(badge,"loggingContext.badgeType",""))
 
-        avgRatingLocalized = utils.get_nested_value(lt,"avgRatingLocalized","")
+        avgRatingLocalized = utils.get_nested_value(result,"avgRatingLocalized","")
         splited = avgRatingLocalized.split(" ")
         if len(splited)==2:
             splited[0] = splited[0].replace(",",".")
@@ -83,7 +92,7 @@ def from_search(results):
         amount, currency = utils.parse_price_symbol(price_to_use)
         data["price"]["total"]["currency_symbol"]=currency
         data["price"]["total"]["amount"]=amount
-        for image_data in utils.get_nested_value(lt,"contextualPictures",[]):
+        for image_data in utils.get_nested_value(result,"contextualPictures",[]):
             img={"url": utils.get_nested_value(image_data,"picture","")}
             data["images"].append(img)   
         for price_detail in utils.get_nested_value(pr,"explanationData.priceDetails",[]):

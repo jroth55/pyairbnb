@@ -34,7 +34,7 @@ headers_global = {
 }
 
 def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_long:float, sw_lat:float, sw_long:float, zoom_value:int, currency:str, place_type: str, price_min: int, price_max: int, amenities: list, free_cancellation: bool, language: str, proxy_url:str):
-    base_url = "https://www.airbnb.com/api/v3/StaysSearch/d4d9503616dc72ab220ed8dcf17f166816dccb2593e7b4625c91c3fce3a3b3d6"
+    base_url = "https://www.airbnb.com/api/v3/StaysSearch/9f945886dcc032b9ef4ba770d9132eb0aa78053296b5405483944c229617b00b"
     query_params = {
         "operationName": "StaysSearch",
         "locale": language,
@@ -106,10 +106,11 @@ def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_l
         "extensions":{
             "persistedQuery": {
                 "version": 1,
-                "sha256Hash": "d4d9503616dc72ab220ed8dcf17f166816dccb2593e7b4625c91c3fce3a3b3d6",
+                "sha256Hash": "9f945886dcc032b9ef4ba770d9132eb0aa78053296b5405483944c229617b00b",
             },
         },
         "variables":{
+            "skipExtendedSearchParams": False,
             "includeMapResults": True,
             "isLeanTreatment": False,
             "staysMapSearchRequestV2": {
@@ -142,8 +143,7 @@ def get(api_key:str, cursor:str, check_in:str, check_out:str, ne_lat:float, ne_l
     if response.status_code != 200:
         raise Exception("Not corret status code: ", response.status_code, " response body: ",response.text)
     data = response.json()
-    to_return=utils.get_nested_value(data,"data.presentation.staysSearch.results",{})
-    return to_return
+    return data
 
 def get_markets(currency: str, locale: str, api_key: str, proxy_url: str):
     query_params = {
