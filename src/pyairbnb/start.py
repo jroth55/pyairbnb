@@ -2,9 +2,9 @@ import pyairbnb.details as details
 import pyairbnb.reviews as reviews
 import pyairbnb.price as price
 import pyairbnb.api as api
-import search
+import pyairbnb.search as search
 import pyairbnb.utils as utils
-import  standardize
+import pyairbnb.standardize as standardize
 import pyairbnb.experience as experience
 import pyairbnb.calendarinfo as calendar
 import pyairbnb.host_details as host_details

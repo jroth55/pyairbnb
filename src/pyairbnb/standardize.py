@@ -1,6 +1,5 @@
 import re
 import pyairbnb.utils as utils
-import json
 
 regex_number =  re.compile(r'\d+')
             

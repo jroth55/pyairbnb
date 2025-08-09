@@ -2,7 +2,6 @@ from datetime import datetime
 from urllib.parse import urlencode
 import pyairbnb.utils as utils
 from curl_cffi import requests
-import json
 
 ep_autocomplete = "https://www.airbnb.com/api/v2/autocompletes-personalized"
 ep_market = "https://www.airbnb.com/api/v2/user_markets"

@@ -1,9 +1,7 @@
 from curl_cffi import requests
 from urllib.parse import urlencode
 import pyairbnb.utils as utils
-import pyairbnb.search as search
 import uuid
-import json
 
 ep_search = "https://www.airbnb.com/api/v3/ExperiencesSearch/fbbf9989cdf264a11fce48073008bb557f7f6b43961ccda5df6a8d988bd6ef36"
 headers = {
